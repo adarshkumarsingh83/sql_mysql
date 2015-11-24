@@ -1,0 +1,79 @@
+SHOW TRIGGERS [{FROM | IN} db_name]
+    [LIKE 'pattern' | WHERE expr]
+
+SHOW TRIGGERS FROM TEST
+WHERE TIMING = 'BEFORE';
+----------------------------------------------------------------------------
+CREATE TABLE TEST(
+ ID INTEGER PRIMARY KEY
+ ,NAME VARCHAR(5) NOT NULL
+ ,MODIFIED DATE
+);
+----------------------------------------------------------------------------
+DROP TABLE IF EXISTS TRIGGER_LOG;
+CREATE TABLE TRIGGER_LOG(
+   ID INTEGER(3) PRIMARY KEY AUTO_INCREMENT
+  ,MSG VARCHAR(50) NOT NULL
+ ,CHANGE_TIME DATE
+);
+-----------------------------------------------------------------------------
+DELIMITER $$
+DROP TRIGGER IF EXISTS BEFORE_INSERT_TRIGGER$$
+CREATE TRIGGER BEFORE_INSERT_TRIGGER BEFORE INSERT ON TEST
+    FOR EACH ROW BEGIN
+       INSERT INTO TRIGGER_LOG(MSG,CHANGE_TIME)VALUES(CONCAT("BEFORE_INSERT_TRIGGER ",NEW.ID),NOW());
+	END$$
+DELIMITER ;
+ -----------------------------------------------------------------------------
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS AFTER_INSERT_TRIGGER$$
+CREATE TRIGGER AFTER_INSERT_TRIGGER AFTER INSERT ON TEST
+    FOR EACH ROW BEGIN
+        
+	END$$
+DELIMITER ;
+
+-----------------------------------------------------------------------------
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS BEFORE_UPDATE_TRIGGER$$
+CREATE TRIGGER BEFORE_UPDATE_TRIGGER BEFORE UPDATE ON TEST
+    FOR EACH ROW BEGIN
+
+	END$$
+DELIMITER ;
+
+
+ -----------------------------------------------------------------------------
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS UPDATE_INSERT_TRIGGER$$
+CREATE TRIGGER UPDATE_INSERT_TRIGGER AFTER UPDATE ON TEST
+    FOR EACH ROW BEGIN
+
+	END$$
+DELIMITER ;
+
+-----------------------------------------------------------------------------
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS BEFORE_DELETE_TRIGGER$$
+CREATE TRIGGER BEFORE_DELETE_TRIGGER BEFORE DELETE ON TEST
+    FOR EACH ROW BEGIN
+
+	END$$
+DELIMITER ;
+
+
+ -----------------------------------------------------------------------------
+
+DELIMITER $$
+DROP TRIGGER IF EXISTS UPDATE_DELETE_TRIGGER$$
+CREATE TRIGGER UPDATE_DELETE_TRIGGER AFTER DELETE ON TEST
+    FOR EACH ROW BEGIN
+
+	END$$
+DELIMITER ;
+
+-----------------------------------------------------------------------------
